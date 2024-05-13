@@ -7,6 +7,7 @@ import webapp.persistence.AddressRowDataGateway;
 import webapp.persistence.CustomerFinder;
 import webapp.persistence.CustomerRowDataGateway;
 import webapp.persistence.PersistenceException;
+import webapp.persistence.SaleRowDataGateway;
 
 
 /**
@@ -110,6 +111,15 @@ public enum CustomerService {
 		}
 	}
 
+	//IMPLEMENTADOS POR MIM BRUNO LIU fc56297
+	//REMOVER LAST SALE BY VAT
+	public void deleteAllSaleByVAT(int VAT) throws ApplicationException {
+		try {
+			AddressRowDataGateway.deleteAllAddressByVat(VAT);
+		} catch (PersistenceException e) {
+				throw new ApplicationException ("Can't delete the last sale from that cutomer.", e);
+		}
+	}
 	 
 	/**
 	 * Checks if a VAT number is valid.

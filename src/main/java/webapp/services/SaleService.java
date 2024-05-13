@@ -99,6 +99,26 @@ public enum SaleService {
 		}
 	}
 	
+	//IMPLEMENTADOS POR MIM BRUNO LIU fc56297
+	//REMOVER LAST SALE BY VAT
+	public void deleteLastSaleByVAT(int VAT) throws ApplicationException {
+		try {
+			SaleRowDataGateway.deleteLastSaleByVAT(VAT);
+		} catch (PersistenceException e) {
+				throw new ApplicationException ("Can't delete the last sale from that cutomer.", e);
+		}
+	}
+	
+	//REMOVER LAST SALE BY VAT
+	public void deleteAllSaleDeliveryByVAT(int VAT) throws ApplicationException {
+		try {
+			SaleRowDataGateway.deleteAllSaleDeliveryByVAT(VAT);
+		} catch (PersistenceException e) {
+				throw new ApplicationException ("Can't delete the last sale from that cutomer.", e);
+		}
+	}
+			
+	
 	/**
 	 * Checks if a VAT number is valid.
 	 * 

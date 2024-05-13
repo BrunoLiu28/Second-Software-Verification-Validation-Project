@@ -119,6 +119,7 @@ public class AddressRowDataGateway{
 			throw new PersistenceException("Internal error getting a customer by its VAT number", e);
 		}
 	}
+	
 	private static AddressRowDataGateway load(ResultSet rs) throws RecordNotFoundException{
 		try {
 			AddressRowDataGateway newCustomerAddress = new AddressRowDataGateway(rs.getString("address"), rs.getInt("customer_vat"));
@@ -128,5 +129,20 @@ public class AddressRowDataGateway{
 			throw new RecordNotFoundException ("Address does not exist", e);
 		}
 	}
+	
+	//ADICIONADO POR MIM BRUNO LIU fc56297
+	private static final String DELETE_ALL_ADDRESS_BY_VAT_SQL =
+	        "DELETE FROM address " +
+	        "WHERE customer_Vat = ?";
+	
+	public static void deleteAllAddressByVat(int customerVat) throws PersistenceException {
+	    try (PreparedStatement statement = DataSource.INSTANCE.prepare(DELETE_ALL_ADDRESS_BY_VAT_SQL)) {
+	        statement.setInt(1, customerVat);
+	        statement.executeUpdate();
+	    } catch (SQLException e) {
+	        throw new PersistenceException("Internal error deleting last address for customer with VAT number " + customerVat + ".", e);
+	    }
+	}
+
 	
 }
