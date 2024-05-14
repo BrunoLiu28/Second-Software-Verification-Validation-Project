@@ -246,17 +246,5 @@ public class SaleRowDataGateway {
 	    }
 	}
 	
-	//CENA DO DELETE PARA O SALEROW
-	private static final String DELETE_ALL_SALE_DELIVERY_BY_VAT_SQL =
-	        "DELETE FROM saledelivery " +
-	          "WHERE s.customer_vat = ?";
 	
-	public static void deleteAllSaleDeliveryByVAT(int vatNumber) throws PersistenceException {
-	    try (PreparedStatement statement = DataSource.INSTANCE.prepare(DELETE_ALL_SALE_DELIVERY_BY_VAT_SQL)) {
-	    	statement.setInt(1, vatNumber);
-		    statement.executeUpdate();
-	    } catch (SQLException e) {
-		    throw new PersistenceException("Internal error deleting last sale for VAT number " + vatNumber + ".", e);
-		}
-	}
 }

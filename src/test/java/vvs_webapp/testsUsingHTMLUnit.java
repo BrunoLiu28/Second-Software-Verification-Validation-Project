@@ -356,7 +356,7 @@ public class testsUsingHTMLUnit {
 		HtmlSubmitInput submitButton = form.getInputByValue("Get Customer");
 		submitButton.click();
 
-		// VERIFICACAO
+		// VERIFICACAO DO CUSTOMER INSERIDO
 		DomElement listAllCustomersButton = page.getElementsById("botao2").get(5);
 		HtmlPage listAllCustomersPage = listAllCustomersButton.click();
 
@@ -364,14 +364,46 @@ public class testsUsingHTMLUnit {
 
 		DomElement firstAddedRow = rows.get(rows.size() - 1);
 		List<HtmlElement> firstCells = firstAddedRow.getElementsByTagName("td");
-// 		System.out.println(firstCells.get(0).getTextContent());
-//	 	System.out.println(firstCells.get(1).getTextContent());
-//	  	System.out.println(firstCells.get(2).getTextContent());
 
 		assertTrue(firstCells.get(0).getTextContent().equals(name));
 		assertTrue(firstCells.get(1).getTextContent().equals(phone));
 		assertTrue(firstCells.get(2).getTextContent().equals(VAT));
 
+		//ADICIONAR ADDRESS AO CUSTOMER
+		DomElement addAddressToCustomerButton = page.getElementsById("botao2").get(1);
+		System.out.println(addAddressToCustomerButton.asText());
+		assertEquals("Insert new Address to Customer", addAddressToCustomerButton.asText());
+		HtmlPage addAddressToCustomerPage = addAddressToCustomerButton.click();
+		form = addAddressToCustomerPage.getForms().get(0);
+		
+		//First Address
+		String address1= "Rua 1";
+		String door1 = "Porta 1";
+		String postalCode1 = "1234-1";
+		String locality1 = "Lisboa";
+		form.getInputByName("vat").setValueAttribute(VAT);
+	    form.getInputByName("address").setValueAttribute(address1);
+	    form.getInputByName("door").setValueAttribute(door1);
+	    form.getInputByName("postalCode").setValueAttribute(postalCode1);
+		form.getInputByName("locality").setValueAttribute(locality1);
+		submitButton = form.getInputByValue("Insert");
+	    HtmlPage nextPage = submitButton.click();
+		
+	    DomElement findCustomerByVatButton = page.getElementsById("botao2").get(3);
+		System.out.println(findCustomerByVatButton.asText());
+		assertEquals("Find customer by vat number", findCustomerByVatButton.asText());
+		HtmlPage findCustomerByVatPage = findCustomerByVatButton.click();
+		HtmlForm findCustomerByVatForm = findCustomerByVatPage.getForms().get(0);
+		findCustomerByVatForm.getInputByName("vat").setValueAttribute(VAT);
+		System.out.println();
+		HtmlSubmitInput submitButton2 = findCustomerByVatForm.getInputByValue("Get Customer");
+		HtmlPage clientInfoPage = submitButton2.click();
+	    
+		rows = (List<DomElement>) clientInfoPage.getElementsByTagName("tr");
+		String addressID = Integer.toString(rows.size()-1);
+		
+		
+		
 		// Insert Sale
 		DomElement newSaleButton = page.getElementsById("botao2").get(6);
 		assertEquals("Insert new Sale", newSaleButton.asText());
@@ -381,16 +413,23 @@ public class testsUsingHTMLUnit {
 		HtmlSubmitInput addSaleButton = newSaleform.getInputByValue("Add Sale");
 		HtmlPage saleInfoPage = addSaleButton.click();
 
+		// OBETER O ID DO NOVO SALE INSERIDO
+		rows = (List<DomElement>) saleInfoPage.getElementsByTagName("tr");
+		List<HtmlElement> cells = rows.get(rows.size() - 1).getElementsByTagName("td");
+		HtmlElement cell = cells.get(0);
+		String saleID = cell.getTextContent();
+		
+
 		// verificar sale inserido
 		Date todaysDate = new Date();
 		List<DomElement> rows2 = (List<DomElement>) saleInfoPage.getElementsByTagName("tr");
 		int numberOfSalesForThatCustomer = rows2.size() - 1;
 //		assertEquals(numberOfSalesForThatCustomer, 1); //MUDAR ESTE 1 para depois conseguir automaticamente  no inicio
 //	    for (DomElement row : rows) {
-		List<HtmlElement> cells = rows2.get(rows2.size() - 1).getElementsByTagName("td");
+		cells = rows2.get(rows2.size() - 1).getElementsByTagName("td");
 //		List<HtmlElement> cells = row.getElementsByTagName("td");
 		for (int i = 0; i < cells.size(); i++) {
-			HtmlElement cell = cells.get(i);
+			cell = cells.get(i);
 //	        for (HtmlElement cell : cells) {
 			System.out.print(cell.getTextContent() + ";");
 			if (i == 0) {
@@ -419,43 +458,62 @@ public class testsUsingHTMLUnit {
 		HtmlPage addSaleDeliveryPage = getCustomerButton.click();
 
 		HtmlForm addSaleDeliveryform = addSaleDeliveryPage.getForms().get(0);
-		String addressID = Integer.toString(rows.size());
-		String saleID = Integer.toString(rows2.size());
+//		String addressID = Integer.toString(rows.size());
 		addSaleDeliveryform.getInputByName("addr_id").setValueAttribute(addressID);
 		addSaleDeliveryform.getInputByName("sale_id").setValueAttribute(saleID);
-		HtmlSubmitInput insertButton = saleDeliveryform.getInputByValue("Insert");
+		HtmlSubmitInput insertButton = addSaleDeliveryform.getInputByValue("Insert");
 		HtmlPage customerSaleInfoPage = insertButton.click();
 
-		// VERIFICAR
-		// verificar sale inserido
-		List<DomElement> rows3 = (List<DomElement>) saleInfoPage.getElementsByTagName("tr");
+		// verificar sale DELIVERY inserido
+		List<DomElement> rows3 = (List<DomElement>) customerSaleInfoPage.getElementsByTagName("tr");
 		int numberOfDeliveryForThatCustomer = rows3.size() - 1;
-//				assertEquals(numberOfSalesForThatCustomer, 1); //MUDAR ESTE 1 para depois conseguir automaticamente  no inicio
-//			    for (DomElement row : rows) {
 		List<HtmlElement> cells3 = rows3.get(rows3.size() - 1).getElementsByTagName("td");
-//				List<HtmlElement> cells = row.getElementsByTagName("td");
+		System.out.println();
 		for (int i = 0; i < cells3.size(); i++) {
-			HtmlElement cell = cells3.get(i);
-//        for (HtmlElement cell : cells) {
+			cell = cells3.get(i);
 			System.out.print(cell.getTextContent() + ";");
 			if (i == 0) {
 //            	assertTrue(cell.getTextContent().equals(1)); //JUST AN ID COUNTER
-			} else if (i == 1) { //SALE ID
+			} else if (i == 1) { // SALE ID
 				assertTrue(cell.getTextContent().equals(saleID));
-			} else if (i == 2) { //ADDRESS ID
+			} else if (i == 2) { // ADDRESS ID
 				assertTrue(cell.getTextContent().equals(addressID));
 			}
 		}
+
+		// DEPOIS DE VERIFICAR TUDO APAGAR DELIVERY SALE, SALE e CUSTOMER
+
+		// APAGAR SALE DELIVERY
+		DomElement deleteAllSaleDeliveryMenuButton = page.getElementsById("botao2").get(13);
+		HtmlPage deleteAllSaleDeliveryPage = deleteAllSaleDeliveryMenuButton.click();
+		HtmlForm deleteAllSaleDeliveryform = deleteAllSaleDeliveryPage.getForms().get(0);
+		deleteAllSaleDeliveryform.getInputByName("customerVat").setValueAttribute(VAT);
+		HtmlSubmitInput deleteAllSaleDeliveryButton = deleteAllSaleDeliveryform.getInputByValue("Delete All Sale Delivery");
+		deleteAllSaleDeliveryButton.click();
 		
-		//DEPOIS DE VERIFICAR TUDO APAGAR DELIVERY SALE, SALE e CUSTOMER
-	
-	// APAGAR SALE
-	DomElement deleteLastSaleMenuButton = page.getElementsById("botao2").get(11);
-	HtmlPage deleteLastSalePage = deleteLastSaleMenuButton.click();
-	HtmlForm deleteLastSaleform = deleteLastSalePage.getForms().get(0);
-	deleteLastSaleform.getInputByName("customerVat").setValueAttribute(VAT);
-	HtmlSubmitInput deleteLastSaleButton = deleteLastSaleform.getInputByValue("Add Sale");
-	deleteLastSaleButton.click();
+		// APAGAR SALE
+		DomElement deleteLastSaleMenuButton = page.getElementsById("botao2").get(11);
+		HtmlPage deleteLastSalePage = deleteLastSaleMenuButton.click();
+		HtmlForm deleteLastSaleform = deleteLastSalePage.getForms().get(0);
+		deleteLastSaleform.getInputByName("customerVat").setValueAttribute(VAT);
+		HtmlSubmitInput deleteLastSaleButton = deleteLastSaleform.getInputByValue("Delete Last Sale");
+		deleteLastSaleButton.click();
+		
+	    //DELETE DE TODOS OS ADDRESS DO CUSTOMER
+	    DomElement deleteAllAddressFromCustomerButton = page.getElementsById("botao2").get(12);
+		HtmlPage deleteAllAddressFromCustomerPage = deleteAllAddressFromCustomerButton.click();
+		HtmlForm deleteAllAddressFromCustomerForm = deleteAllAddressFromCustomerPage.getForms().get(0);
+		deleteAllAddressFromCustomerForm.getInputByName("customerVat").setValueAttribute(VAT);
+		HtmlSubmitInput deleteAllAddressButton = deleteAllAddressFromCustomerForm.getInputByValue("Delete All Address");
+		deleteAllAddressButton.click();
+		
+		//Remover customers inseridos
+		DomElement removeCustomerButton = page.getElementsById("botao2").get(2);
+	    HtmlPage removeCustomerPage = removeCustomerButton.click();
+	    HtmlForm removeCustomerform = removeCustomerPage.getForms().get(0);
+	    removeCustomerform.getInputByName("vat").setValueAttribute(VAT);
+	    HtmlSubmitInput removeButton = removeCustomerform.getInputByValue("Remove");
+	    removeButton.click();
 	}
 
 }

@@ -20,7 +20,6 @@ public class DeleteAllSaleDeliveryController extends PageController{
 		SaleService ss = SaleService.INSTANCE;
 		
 		SalesHelper sh = new SalesHelper();
-//		request.setAttribute("salesHelper", sh);
 		
 		try{
 			String vat = request.getParameter("customerVat");
@@ -28,8 +27,6 @@ public class DeleteAllSaleDeliveryController extends PageController{
 				int vatNumber = intValue(vat);
 				ss.deleteAllSaleDeliveryByVAT(vatNumber);
 				request.getRequestDispatcher("index.html").forward(request, response);
-//				sh.fillWithSales(sdto.sales);
-//				request.getRequestDispatcher("SalesInfo.jsp").forward(request, response);
 			}
 		} catch (ApplicationException e) {
 			sh.addMessage("It was not possible to fulfill the request: " + e.getMessage());

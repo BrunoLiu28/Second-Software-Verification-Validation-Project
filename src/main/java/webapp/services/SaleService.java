@@ -112,7 +112,7 @@ public enum SaleService {
 	//REMOVER LAST SALE BY VAT
 	public void deleteAllSaleDeliveryByVAT(int VAT) throws ApplicationException {
 		try {
-			SaleRowDataGateway.deleteAllSaleDeliveryByVAT(VAT);
+			SaleDeliveryRowDataGateway.deleteAllSaleDeliveryByVAT(VAT);
 		} catch (PersistenceException e) {
 				throw new ApplicationException ("Can't delete the last sale from that cutomer.", e);
 		}
