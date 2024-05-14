@@ -6,8 +6,8 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet" type="text/css" href="resources/app.css" />
-<link rel="stylesheet" href="resource/css.css">
+
+<link rel="stylesheet" href="resources/css.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Allerta+Stencil">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <TITLE>Enter Sale Id</TITLE>
