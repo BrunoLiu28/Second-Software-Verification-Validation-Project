@@ -1,11 +1,13 @@
-package vvs_webapp;
+package DBSetup;
 
 import static com.ninja_squad.dbsetup.Operations.*;
+
+import java.sql.Date;
+
 import com.ninja_squad.dbsetup.generator.ValueGenerators;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
 
-import java.util.GregorianCalendar;
 
 import webapp.persistence.PersistenceException;
 
@@ -47,8 +49,9 @@ public class DBSetupUtils {
     public static final int NUM_INIT_CUSTOMERS;
     public static final int NUM_INIT_SALES;
     public static final int NUM_INIT_ADDRESSES;
+    public static final int NUM_INIT_SALE_DEVIVERIES;
 
-    public static final Operation INSERT_CUSTOMER_SALE_DATA;
+    public static final Operation INSERT_SALE_AND_SALE_DELIVERY_DATA;
     public static final Operation INSERT_CUSTOMER_ADDRESS_DATA;
 	
 	static {
@@ -62,18 +65,6 @@ public class DBSetupUtils {
 		
 		NUM_INIT_CUSTOMERS = insertCustomers.getRowCount();
 		
-		Insert insertSales = 
-			insertInto("SALE")
-            .columns("ID",                            "DATE", "TOTAL", "STATUS", "CUSTOMER_VAT")
-            .values(   1,  new GregorianCalendar(2018,01,02),     0.0,      'O',      197672337)
-            .values(   2,  new GregorianCalendar(2017,03,25),     0.0,      'O',      197672337)
-            .build();
-		
-		NUM_INIT_SALES = insertSales.getRowCount();
-		
-		// it's possible to combine dataset samples with 'sequenceOf'
-		INSERT_CUSTOMER_SALE_DATA = sequenceOf(insertCustomers, insertSales);
-		
 		Insert insertAddresses = 
 				insertInto("ADDRESS")
                 .withGeneratedValue("ID", ValueGenerators.sequence().startingAt(100L).incrementingBy(1))
@@ -86,6 +77,40 @@ public class DBSetupUtils {
 		NUM_INIT_ADDRESSES = insertAddresses.getRowCount();		
 		
 		INSERT_CUSTOMER_ADDRESS_DATA = sequenceOf(insertCustomers, insertAddresses);
+		
+//		Insert insertSales = 
+//			insertInto("SALE")
+//            .columns("ID",                            "DATE", "TOTAL", "STATUS", "CUSTOMER_VAT")
+//            .values(   1,  				new Date(2018,01,02),     0.0,      'O',      197672337)
+//            .values(   2,  				new Date(2018,01,02),     0.0,      'O',      197672337)
+//            .build();
+		
+		Insert insertSales = 
+			    insertInto("SALE")
+			    .withGeneratedValue("ID", ValueGenerators.sequence().startingAt(1).incrementingBy(1))
+			    .columns("DATE", "TOTAL", "STATUS", "CUSTOMER_VAT")
+			    .values(new Date(118, 0, 2), 0.0, 'O', 197672337)
+			    .values(new Date(118, 0, 2), 0.0, 'O', 197672337)
+			    .build();
+
+		
+		NUM_INIT_SALES = insertSales.getRowCount();
+		
+		Insert insertSaleDeliveries = 
+			    insertInto("SALEDELIVERY")
+			    .withGeneratedValue("ID", ValueGenerators.sequence().startingAt(1).incrementingBy(1))
+			    .columns("SALE_ID", "CUSTOMER_VAT", "ADDRESS_ID")
+			    .values(1, 197672337, 1)
+			    .values(2, 197672337, 2)
+			    .build();
+
+		
+		NUM_INIT_SALE_DEVIVERIES = insertSaleDeliveries.getRowCount();
+		
+		// it's possible to combine dataset samples with 'sequenceOf'
+		INSERT_SALE_AND_SALE_DELIVERY_DATA = sequenceOf(insertSales, insertSaleDeliveries);
+		
+		
 	}
 	
 }
