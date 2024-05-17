@@ -78,13 +78,6 @@ public class DBSetupUtils {
 		
 		INSERT_CUSTOMER_ADDRESS_DATA = sequenceOf(insertCustomers, insertAddresses);
 		
-//		Insert insertSales = 
-//			insertInto("SALE")
-//            .columns("ID",                            "DATE", "TOTAL", "STATUS", "CUSTOMER_VAT")
-//            .values(   1,  				new Date(2018,01,02),     0.0,      'O',      197672337)
-//            .values(   2,  				new Date(2018,01,02),     0.0,      'O',      197672337)
-//            .build();
-		
 		Insert insertSales = 
 			    insertInto("SALE")
 			    .withGeneratedValue("ID", ValueGenerators.sequence().startingAt(1).incrementingBy(1))

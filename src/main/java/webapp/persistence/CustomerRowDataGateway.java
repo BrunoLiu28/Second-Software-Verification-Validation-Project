@@ -227,7 +227,7 @@ public class CustomerRowDataGateway {
 			throw new PersistenceException("Internal error updating customer " + id + ".", e);
 		}
 
-		// ADICIONADO POR MIM PARA APAGAR OS SALES QUANDO APAGA O USER
+		// ADICIONADO POR MIM PARA APAGAR OS SALE DELIVERIES QUANDO APAGA O USER
 		try (PreparedStatement statement = DataSource.INSTANCE.prepare(REMOVE_SALE_DELIVERIES_BY_CUSTOMER_VAT)) {
 			statement.setInt(1, vat);
 			statement.executeUpdate();
