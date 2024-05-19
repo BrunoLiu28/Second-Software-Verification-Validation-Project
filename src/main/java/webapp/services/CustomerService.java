@@ -120,6 +120,14 @@ public enum CustomerService {
 				throw new ApplicationException ("Can't delete the last sale from that cutomer.", e);
 		}
 	}
+	
+//	public boolean existCustomer(int VAT) throws ApplicationException {
+//		try {
+//			return CustomerRowDataGateway.customerExists(VAT);
+//		} catch (PersistenceException e) {
+//				throw new ApplicationException ("Can't delete the last sale from that cutomer.", e);
+//		}
+//	}
 	 
 	/**
 	 * Checks if a VAT number is valid.

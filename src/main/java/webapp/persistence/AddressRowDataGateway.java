@@ -94,6 +94,12 @@ public class AddressRowDataGateway{
 				"from address " +
 				"where customer_Vat = ?";
 	
+//	private static final String GET_ADDRESS_BY_CUSTOMER_VAT_SQL =
+//		    "SELECT *, TRIM(address) AS address " + 
+//		    "FROM address " +
+//		    "WHERE customer_Vat = ?";
+
+	
 	/**
 	 * Gets the products of a sale by its sale id 
 	 * 

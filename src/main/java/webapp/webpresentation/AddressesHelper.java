@@ -19,6 +19,7 @@ private List<AddressHelper> addresses;
 	public void fillWithAddresses(List<AddressDTO> addr) {
 		for(AddressDTO a : addr) {
 			AddressHelper ah = new AddressHelper();
+			System.out.println(a.address + "resto");
 			ah.fillWithAddress(a);
 			addresses.add(ah);
 		}

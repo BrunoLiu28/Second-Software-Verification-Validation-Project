@@ -46,7 +46,13 @@ public class GetCustomerPageController extends PageController {
 				int vatNumber = intValue(vat);
 				ch.fillWithCustomer(cs.getCustomerByVat(vatNumber));
 				if(address != null) {
-					cs.addAddressToCustomer(vatNumber, (address + ";" + door + ";" + postalCode + ";" + locality));
+					if(!address.contains(";") && !postalCode.contains(";") && !door.contains(";") && !address.isEmpty()) {
+						cs.addAddressToCustomer(vatNumber, (address + ";" + door + ";" + postalCode + ";" + locality));
+					} else {
+						ch.addMessage("Cannot include ';' in the inputs");
+						request.getRequestDispatcher("CustomerError.jsp").forward(request, response); 
+					}
+					
 				}
 				AddressesDTO a = cs.getAllAddresses(vatNumber);
 				ash.fillWithAddresses(a.addrs);

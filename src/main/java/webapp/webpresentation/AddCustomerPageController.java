@@ -11,21 +11,23 @@ import webapp.services.ApplicationException;
 import webapp.services.CustomerService;
 
 @WebServlet("/AddCustomerPageController")
-public class AddCustomerPageController extends PageController{
+public class AddCustomerPageController extends PageController {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void process(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		CustomerService cs = CustomerService.INSTANCE;
-		
+
 		CustomerHelper ch = new CustomerHelper();
 		request.setAttribute("helper", ch);
-		
-		try{
+
+		try {
 			String vat = request.getParameter("vat");
 			String phone = request.getParameter("phone");
 			String designation = request.getParameter("designation");
-			if (isInt(ch, vat, "Invalid VAT number") && isInt(ch, phone, "Invalid phone number")) {
+			if (isInt(ch, vat, "Invalid VAT number") && isInt(ch, phone, "Invalid phone number")
+					&& !designation.equals("") && Integer.parseInt(phone)>0) {
 				int vatNumber = intValue(vat);
 				int phoneNumber = intValue(phone);
 				cs.addCustomer(vatNumber, designation, phoneNumber);
@@ -34,7 +36,7 @@ public class AddCustomerPageController extends PageController{
 			}
 		} catch (ApplicationException e) {
 			ch.addMessage("It was not possible to fulfill the request: " + e.getMessage());
-			request.getRequestDispatcher("CustomerError.jsp").forward(request, response); 
+			request.getRequestDispatcher("CustomerError.jsp").forward(request, response);
 		}
 	}
 }

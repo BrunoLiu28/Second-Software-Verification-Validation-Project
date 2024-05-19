@@ -236,4 +236,17 @@ public class CustomerRowDataGateway {
 		}
 	}
 
+	private static final String CUSTOMER_EXISTS_QUERY = "SELECT 1 FROM Customers WHERE vat = ?";
+
+//	public static boolean customerExists(int vat) throws PersistenceException {
+//		try (PreparedStatement statement = DataSource.INSTANCE.prepare(CUSTOMER_EXISTS_QUERY)) {
+//			statement.setInt(1, vat);
+//			try (ResultSet resultSet = statement.executeQuery()) {
+//				return resultSet.next();
+//			}
+//		} catch (SQLException e) {
+//			throw new PersistenceException("Error checking if customer exists", e);
+//		}
+//	}
+
 }
